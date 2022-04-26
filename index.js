@@ -32,16 +32,23 @@ async function run() {
         });
         //checking admin or not
         app.get('/user/:email', async (req, res) => {
-            console.log('hitting admin check')
+            console.log('hitting admin/tutor check')
             const email = req.params.email;
             const query = { email: email };
             const result = await userCollection.findOne(query);
             let Isadmin = false;
+            let Istutor = false;
             if (result?.role == 'admin') {
                 Isadmin = true
+                res.json({ admin: Isadmin, tutor: false });
+            }
+            else if (result?.role == 'tutor') {
+                Istutor = true
+                res.json({ admin: false, tutor: Istutor });
             }
             console.log('success');
-            res.json({ admin: Isadmin });
+            res.json({ admin: false, tutor: false });
+
         });
         app.put('/user', async (req, res) => {
             const user = req.body;
@@ -52,19 +59,29 @@ async function run() {
             // res.json(result);
             console.log('success put')
         });
-        app.put('/admin/email', async (req, res) => {
+        app.put('/admin/:email', async (req, res) => {
 
-            const user = req.body;
-            const requesterAccount = await userCollection.findOne({ email: requester });
-            if (requesterAccount.role === 'admin') {
-                const filter = { email: user.email };
-                const updateDoc = { $set: { role: 'admin' } };
-                const result = await userCollection.updateOne(filter, updateDoc);
-                res.json(result);
-            }
-            else {
-                res.status(403).json({ message: 'you do not have access to make admin' })
-            }
+            const email = req.params.email;
+            const query = { email: email };
+            // const result = await userCollection.findOne(query);
+            const updateDoc = { $set: { role: 'admin' } };
+            const result = await userCollection.updateOne(query, updateDoc);
+            res.json(result);
+
+
+
+        });
+        // tutor
+        app.put('/tutor/:email', async (req, res) => {
+
+            const email = req.params.email;
+            const query = { email: email };
+            // const result = await userCollection.findOne(query);
+            const updateDoc = { $set: { role: 'tutor' } };
+            const result = await userCollection.updateOne(query, updateDoc);
+            res.json(result);
+
+
 
         });
 
