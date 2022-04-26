@@ -40,14 +40,14 @@ async function run() {
             let Istutor = false;
             if (result?.role == 'admin') {
                 Isadmin = true
-                res.json({ admin: Isadmin, tutor: false });
+                // res.json({ admin: Isadmin, tutor: false });
             }
             else if (result?.role == 'tutor') {
                 Istutor = true
-                res.json({ admin: false, tutor: Istutor });
+                // res.json({ admin: false, tutor: Istutor });
             }
             console.log('success');
-            res.json({ admin: false, tutor: false });
+            res.json({ admin: Isadmin, tutor: Istutor });
 
         });
         app.put('/user', async (req, res) => {
