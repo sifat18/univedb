@@ -84,6 +84,12 @@ async function run() {
 
 
         });
+        // get courses
+        app.get('/courses', async (req, res) => {
+            const courseData = await courseCollection.find({})
+            const courseDataArray = await courseData.toArray()
+            res.json(courseDataArray)
+        })
         // sending data to db
         app.post('/courses', async (req, res) => {
             const data = req.body
