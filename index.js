@@ -16,7 +16,7 @@ async function run() {
     try {
         await client.connect();
         const univeDb = client.db('unive')
-        // const watchCollection = titanDB.collection('watches')
+        const courseCollection = univeDb.collection('courses')
         // const reviewCollection = titanDB.collection('reviews')
         // const orderCollection = titanDB.collection('orders')
         const userCollection = univeDb.collection('users')
@@ -84,8 +84,12 @@ async function run() {
 
 
         });
-
-
+        // sending data to db
+        app.post('/courses', async (req, res) => {
+            const data = req.body
+            const result = await courseCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
 
 
     } finally {
