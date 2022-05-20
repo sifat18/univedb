@@ -90,6 +90,14 @@ async function run() {
             const courseDataArray = await courseData.toArray()
             res.json(courseDataArray)
         })
+        // course by id
+        app.get('/course/:id', async (req, res) => {
+            console.log('getting course by id')
+            const cursor = req.params.id
+            const filter = { _id: ObjectID(cursor) }
+            const courseData = await courseCollection.findOne(filter)
+            res.json(courseData)
+        })
         // sending data to db
         app.post('/courses', async (req, res) => {
             const data = req.body
