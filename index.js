@@ -3,11 +3,13 @@ const express = require('express');
 const app = express()
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
+const fileUpload = require('express-fileupload');
 const ObjectID = require('mongodb').ObjectId;
 const port = process.env.PORT || 7000
 
 app.use(cors());
 app.use(express.json())
+app.use(fileUpload())
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.tmheq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -20,6 +22,7 @@ async function run() {
         // const reviewCollection = titanDB.collection('reviews')
         // const orderCollection = titanDB.collection('orders')
         const userCollection = univeDb.collection('users')
+        const scholarshipCollection = univeDb.collection('scholarships')
 
 
 
@@ -104,6 +107,19 @@ async function run() {
             const result = await courseCollection.insertOne(data);
             res.send(result.acknowledged)
         })
+        // registering users for the first time
+        app.post('/scholarship', async (req, res) => {
+            const { FullName, email, PhoneNumber, edu_qualification, platform_learn, scholarship_need } = req.body
+            const pdf = req.files.pdf
+            const pdfData = pdf.data
+            const encodedPdf = pdfData.toString('base64')
+            const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
+            const data = {
+                FullName, email, PhoneNumber, edu_qualification, platform_learn, scholarship_need, pdf: Pdfbuffer
+            }
+            const result = await scholarshipCollection.insertOne(data);
+            res.json(result)
+        });
 
 
     } finally {
