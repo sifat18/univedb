@@ -101,6 +101,14 @@ async function run() {
             const courseData = await courseCollection.findOne(filter)
             res.json(courseData)
         })
+        // courses by tag
+        app.get('/courses/:tag', async (req, res) => {
+            const tag = req.params.tag;
+            const query = { tag: tag };
+            const result = await courseCollection.find(query);
+            const courseDataArray = await result.toArray()
+            res.json(courseDataArray)
+        })
         // sending data to db
         app.post('/courses', async (req, res) => {
             const data = req.body
