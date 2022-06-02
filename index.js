@@ -150,6 +150,19 @@ async function run() {
             const result = await instructorApplyCollection.insertOne(data);
             res.send(result)
         })
+        // sending contributer data to db
+        app.post('/contributer', async (req, res) => {
+            const { FullName, email, PhoneNumber, subject } = req.body
+            const pdf = req.files.pdf
+            const pdfData = pdf.data
+            const encodedPdf = pdfData.toString('base64')
+            const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
+            const data = {
+                FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
+            }
+            const result = await instructorApplyCollection.insertOne(data);
+            res.send(result)
+        })
 
     } finally {
         // client.close()
