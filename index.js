@@ -22,6 +22,7 @@ async function run() {
         // const reviewCollection = titanDB.collection('reviews')
         // const orderCollection = titanDB.collection('orders')
         const userCollection = univeDb.collection('users')
+        const recruitCollection = univeDb.collection('recruits')
         const scholarshipCollection = univeDb.collection('scholarships')
 
 
@@ -129,6 +130,12 @@ async function run() {
             res.json(result)
         });
 
+        // sending recruit data to db
+        app.post('/recruit', async (req, res) => {
+            const data = req.body
+            const result = await recruitCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
 
     } finally {
         // client.close()
