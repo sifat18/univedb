@@ -23,6 +23,7 @@ async function run() {
         // const orderCollection = titanDB.collection('orders')
         const userCollection = univeDb.collection('users')
         const recruitCollection = univeDb.collection('recruits')
+        const instructorApplyCollection = univeDb.collection('instructorAply')
         const scholarshipCollection = univeDb.collection('scholarships')
 
 
@@ -134,6 +135,19 @@ async function run() {
         app.post('/recruit', async (req, res) => {
             const data = req.body
             const result = await recruitCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
+        // sending instructor data to db
+        app.post('/instructor', async (req, res) => {
+            const { FullName, email, PhoneNumber, subject } = req.body
+            const pdf = req.files.pdf
+            const pdfData = pdf.data
+            const encodedPdf = pdfData.toString('base64')
+            const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
+            const data = {
+                FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
+            }
+            const result = await instructorApplyCollection.insertOne(data);
             res.send(result.acknowledged)
         })
 
