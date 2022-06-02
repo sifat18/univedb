@@ -25,6 +25,7 @@ async function run() {
         const recruitCollection = univeDb.collection('recruits')
         const instructorApplyCollection = univeDb.collection('instructorAply')
         const scholarshipCollection = univeDb.collection('scholarships')
+        const contributerApplyCollection = univeDb.collection('contributerAply')
 
 
 
@@ -160,7 +161,7 @@ async function run() {
             const data = {
                 FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
             }
-            const result = await instructorApplyCollection.insertOne(data);
+            const result = await contributerApplyCollection.insertOne(data);
             res.send(result)
         })
 
