@@ -24,6 +24,7 @@ async function run() {
         const userCollection = univeDb.collection('users')
         const recruitCollection = univeDb.collection('recruits')
         const instructorApplyCollection = univeDb.collection('instructorAply')
+        const instructorApplyCollection2 = univeDb.collection('instructorAply2')
         const scholarshipCollection = univeDb.collection('scholarships')
         const contributerApplyCollection = univeDb.collection('contributerAply')
 
@@ -151,6 +152,14 @@ async function run() {
             const result = await instructorApplyCollection.insertOne(data);
             res.send(result)
         })
+
+        // sending instructorForm2 data to db
+        app.post('/instructorForm2', async (req, res) => {
+            const data = req.body
+            const result = await instructorApplyCollection2.insertOne(data);
+            res.send(result.acknowledged)
+        })
+
         // sending contributer data to db
         app.post('/contributer', async (req, res) => {
             const { FullName, email, PhoneNumber, subject } = req.body
