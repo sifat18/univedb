@@ -148,7 +148,7 @@ async function run() {
                 FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
             }
             const result = await instructorApplyCollection.insertOne(data);
-            res.send(result.acknowledged)
+            res.send(result)
         })
 
     } finally {
