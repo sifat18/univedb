@@ -23,6 +23,7 @@ async function run() {
         // const orderCollection = titanDB.collection('orders')
         const userCollection = univeDb.collection('users')
         const recruitCollection = univeDb.collection('recruits')
+        const orgRecruitCollection = univeDb.collection('recruitOrg')
         const instructorApplyCollection = univeDb.collection('instructorAply')
         const instructorApplyCollection2 = univeDb.collection('instructorAply2')
         const scholarshipCollection = univeDb.collection('scholarships')
@@ -137,6 +138,12 @@ async function run() {
         app.post('/recruit', async (req, res) => {
             const data = req.body
             const result = await recruitCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
+        // sending organization data to db
+        app.post('/orgFrom', async (req, res) => {
+            const data = req.body
+            const result = await orgRecruitCollection.insertOne(data);
             res.send(result.acknowledged)
         })
         // sending instructor data to db
