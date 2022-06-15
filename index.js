@@ -127,11 +127,12 @@ async function run() {
             // console.log(data);
             const filter = { _id: ObjectID(id) };
             const { _id, ...rest } = { ...data }
+            // dont need the commented lines 
             // const option = { upsert: true };
             // console.log(rest);
             const updateDoc = { ...rest }
             const result = await courseCollection.replaceOne(filter, updateDoc);
-            //   works but removes objectID
+            //   edit trials
             // let resp = await courseCollection.find(filter);
             // let entry = await courseCollection.insertOne(data);
             // let resp = await courseCollection.findOneAndReplace(filter, updateDoc, { upsert: true });
