@@ -115,6 +115,26 @@ async function run() {
             const result = await courseCollection.insertOne(data);
             res.send(result.acknowledged)
         })
+        app.put('/courses/edit/:id', async (req, res) => {
+            const id = req.params.id;
+            const data = req.body
+            console.log('hit');
+            // console.log(data);
+            const filter = { _id: ObjectID(id) };
+            const { _id, ...rest } = { ...data }
+            // const option = { upsert: true };
+            // console.log(rest);
+            const updateDoc = { ...rest }
+            const result = await courseCollection.replaceOne(filter, updateDoc);
+            //   works but removes objectID
+            // let resp = await courseCollection.find(filter);
+            // let entry = await courseCollection.insertOne(data);
+            // let resp = await courseCollection.findOneAndReplace(filter, updateDoc, { upsert: true });
+
+            // console.log(result)
+
+            res.send(result.acknowledged)
+        })
         // registering users for the first time
         app.post('/scholarship', async (req, res) => {
             const { FullName, email, PhoneNumber, edu_qualification, platform_learn, scholarship_need } = req.body
