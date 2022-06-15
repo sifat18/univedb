@@ -22,7 +22,12 @@ async function run() {
         // const reviewCollection = titanDB.collection('reviews')
         // const orderCollection = titanDB.collection('orders')
         const userCollection = univeDb.collection('users')
+        const recruitCollection = univeDb.collection('recruits')
+        const orgRecruitCollection = univeDb.collection('recruitOrg')
+        const instructorApplyCollection = univeDb.collection('instructorAply')
+        const instructorApplyCollection2 = univeDb.collection('instructorAply2')
         const scholarshipCollection = univeDb.collection('scholarships')
+        const contributerApplyCollection = univeDb.collection('contributerAply')
 
 
 
@@ -149,6 +154,52 @@ async function run() {
             res.json(result)
         });
 
+        // sending recruit data to db
+        app.post('/recruit', async (req, res) => {
+            const data = req.body
+            const result = await recruitCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
+        // sending organization data to db
+        app.post('/orgFrom', async (req, res) => {
+            const data = req.body
+            const result = await orgRecruitCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
+        // sending instructor data to db
+        app.post('/instructor', async (req, res) => {
+            const { FullName, email, PhoneNumber, subject } = req.body
+            const pdf = req.files.pdf
+            const pdfData = pdf.data
+            const encodedPdf = pdfData.toString('base64')
+            const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
+            const data = {
+                FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
+            }
+            const result = await instructorApplyCollection.insertOne(data);
+            res.send(result)
+        })
+
+        // sending instructorForm2 data to db
+        app.post('/instructorForm2', async (req, res) => {
+            const data = req.body
+            const result = await instructorApplyCollection2.insertOne(data);
+            res.send(result.acknowledged)
+        })
+
+        // sending contributer data to db
+        app.post('/contributer', async (req, res) => {
+            const { FullName, email, PhoneNumber, subject } = req.body
+            const pdf = req.files.pdf
+            const pdfData = pdf.data
+            const encodedPdf = pdfData.toString('base64')
+            const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
+            const data = {
+                FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
+            }
+            const result = await contributerApplyCollection.insertOne(data);
+            res.send(result)
+        })
 
     } finally {
         // client.close()
