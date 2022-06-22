@@ -21,6 +21,7 @@ async function run() {
         const courseCollection = univeDb.collection('courses')
         // const reviewCollection = titanDB.collection('reviews')
         // const orderCollection = titanDB.collection('orders')
+        const resumeCollection = univeDb.collection('resume')
         const userCollection = univeDb.collection('users')
         const recruitCollection = univeDb.collection('recruits')
         const orgRecruitCollection = univeDb.collection('recruitOrg')
@@ -201,6 +202,21 @@ async function run() {
             const result = await contributerApplyCollection.insertOne(data);
             res.send(result)
         })
+
+        // registering users for the first time
+        app.put('/resume/:email', async (req, res) => {
+            // console.log('hit', req.params.email);
+            const data = req.body
+            // console.log(data);
+            const filter = { "basics.email": req.params.email };
+            const option = { upsert: true };
+            const updateDoc = { ...data }
+            const result = await resumeCollection.replaceOne(filter, updateDoc, option);
+            console.log(result);
+            res.send(result.acknowledged);
+
+
+        });
 
     } finally {
         // client.close()
