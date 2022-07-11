@@ -19,6 +19,8 @@ async function run() {
         await client.connect();
         const univeDb = client.db('unive')
         const courseCollection = univeDb.collection('courses')
+        const orderCollection = univeDb.collection('orders')
+
         // const reviewCollection = titanDB.collection('reviews')
         // const orderCollection = titanDB.collection('orders')
         const resumeCollection = univeDb.collection('resume')
@@ -188,6 +190,13 @@ async function run() {
             const result = await instructorApplyCollection2.insertOne(data);
             res.send(result.acknowledged)
         })
+        app.post('/order', async (req, res) => {
+            // console.log("posted")
+            const query = req.body;
+            const result = await orderCollection.insertOne(query);
+            // console.log(result)
+            res.json(result)
+        })
 
         // sending contributer data to db
         app.post('/contributer', async (req, res) => {
@@ -203,7 +212,7 @@ async function run() {
             res.send(result)
         })
 
-        // registering users for the first time
+        // registering resumes 
         app.put('/resume/:email', async (req, res) => {
             // console.log('hit', req.params.email);
             const data = req.body
