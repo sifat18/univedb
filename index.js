@@ -197,6 +197,12 @@ async function run() {
             // console.log(result)
             res.json(result)
         })
+        app.get('/order/:mail', async (req, res) => {
+            const filter = req.params.mail;
+            const query = { email: filter }
+            const data = await orderCollection.find(query).toArray();
+            res.send(data)
+        })
 
         // sending contributer data to db
         app.post('/contributer', async (req, res) => {
