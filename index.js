@@ -41,6 +41,12 @@ async function run() {
             console.log('success');
             // res.json(result);
         });
+        // getting all users 
+        app.get('/users', async (req, res) => {
+            const userData = await userCollection.find({})
+            const userDataArray = await userData.toArray()
+            res.json(userDataArray)
+        })
         //checking admin or not
         app.get('/user/:email', async (req, res) => {
             console.log('hitting admin/tutor check')
