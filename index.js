@@ -238,6 +238,14 @@ async function run() {
 
 
         });
+        // registering resumes 
+        app.get('/resume', async (req, res) => {
+            const resumeData = await resumeCollection.find({})
+            const resumeDataArray = await resumeData.toArray()
+            res.json(resumeDataArray)
+
+
+        });
 
     } finally {
         // client.close()
