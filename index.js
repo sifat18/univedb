@@ -102,6 +102,14 @@ async function run() {
 
         });
         // get courses
+        app.get('/mycourse', async (req, res) => {
+            const { _id, email } = req.query
+            // console.log(_id, email);
+            const filter = { email: email, 'course._id': _id }
+            const courseData = await orderCollection.findOne(filter)
+            const { course } = courseData
+            res.json(course)
+        })
         app.get('/courses', async (req, res) => {
             const courseData = await courseCollection.find({})
             const courseDataArray = await courseData.toArray()
@@ -238,7 +246,7 @@ async function run() {
 
 
         });
-        // registering resumes 
+        // get resumes 
         app.get('/resume', async (req, res) => {
             const resumeData = await resumeCollection.find({})
             const resumeDataArray = await resumeData.toArray()
