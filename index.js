@@ -207,6 +207,8 @@ async function run() {
         app.post('/order', async (req, res) => {
             // console.log("posted")
             const query = req.body;
+            query.course.progress = 0;
+            query.course.modComplete = 0;
             const result = await orderCollection.insertOne(query);
             // console.log(result)
             res.json(result)
@@ -216,6 +218,22 @@ async function run() {
             const query = { email: filter }
             const data = await orderCollection.find(query).toArray();
             res.send(data)
+        })
+        app.put('/orderUpdate', async (req, res) => {
+            console.log('orderupdate put');
+            const { email, id, mod, progress } = req.body;
+            console.log(email, id, mod, progress);
+
+            // const msg = 'shipped';
+            // const filter = req.params.id;
+            // const query = { _id: ObjectID(filter) }
+            // const data = await orderCollection.updateOne(query, {
+            //     $set: {
+            //         orderStatus: "shipped",
+            //     }
+            // });
+            // console.log(data)
+            res.send(true)
         })
 
         // sending contributer data to db
