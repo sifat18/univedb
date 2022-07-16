@@ -222,18 +222,16 @@ async function run() {
         app.put('/orderUpdate', async (req, res) => {
             console.log('orderupdate put');
             const { email, id, mod, progress } = req.body;
-            console.log(email, id, mod, progress);
-
-            // const msg = 'shipped';
-            // const filter = req.params.id;
-            // const query = { _id: ObjectID(filter) }
-            // const data = await orderCollection.updateOne(query, {
-            //     $set: {
-            //         orderStatus: "shipped",
-            //     }
-            // });
-            // console.log(data)
-            res.send(true)
+            // console.log(email, id, mod, progress);
+            const filter = { email: email, 'course._id': id }
+            const data = await orderCollection.updateOne(filter, {
+                $set: {
+                    'course.progress': progress,
+                    'course.modComplete': mod,
+                }
+            });
+            console.log(data)
+            res.send(data)
         })
 
         // sending contributer data to db
