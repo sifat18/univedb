@@ -228,10 +228,10 @@ async function run() {
                 $set: {
                     'course.progress': progress,
                     'course.modComplete': mod,
-                    "course.Module.$[index].mod_complete": true,
+                    "course.Module.$[element].mod_complete": true,
                 }},
                 { 
-                   arrayFilters: [ { index: index } ] }
+                   arrayFilters: [ { element: index } ], upsert: true }
             );
             console.log(data)
             res.send(data)
