@@ -226,12 +226,12 @@ async function run() {
             const filter = { email: email, 'course._id': id }
             const data = await orderCollection.updateOne(filter, {
                 $set: {
-                    'course.progress': progress,
-                    'course.modComplete': mod,
-                    "course.Module.$[element].mod_complete": true,
+                    "course.progress": progress,
+                    "course.modComplete": mod,
+                    "Module.$[element].mod_complete": true,
                 }},
                 { 
-                   arrayFilters: [ { element: index } ], upsert: true }
+                   arrayFilters: [ { element: index } ] }
             );
             console.log(data)
             res.send(data)
