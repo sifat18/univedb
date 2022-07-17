@@ -228,7 +228,7 @@ async function run() {
                 $set: {
                     'course.progress': progress,
                     'course.modComplete': mod,
-                    "Module.$[element].mod_complete": true,
+                    "course.Module.$[element].mod_complete": true,
                 }},
                 { 
                    arrayFilters: [ { element: index } ] }
