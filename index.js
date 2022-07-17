@@ -221,15 +221,18 @@ async function run() {
         })
         app.put('/orderUpdate', async (req, res) => {
             console.log('orderupdate put');
-            const { email, id, mod, progress } = req.body;
+            const {index, mod_complete, email, id, mod, progress } = req.body;
             // console.log(email, id, mod, progress);
             const filter = { email: email, 'course._id': id }
             const data = await orderCollection.updateOne(filter, {
                 $set: {
                     'course.progress': progress,
                     'course.modComplete': mod,
-                }
-            });
+                    "course.Module.$[index].mod_complete": mod_complete,
+                }},
+                { 
+                   arrayFilters: [ { index: index } ], upsert: true }
+            );
             console.log(data)
             res.send(data)
         })
