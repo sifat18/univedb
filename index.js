@@ -221,13 +221,13 @@ async function run() {
         })
         app.put('/orderUpdate', async (req, res) => {
             console.log('orderupdate put');
-            const {index, mod_complete, email, id, mod, progress } = req.body;
+            const {index,email, id, mod, progress } = req.body;
             // console.log(email, id, mod, progress);
             const filter = { email: email, 'course._id': id }
             const data = await orderCollection.updateOne(filter, {
                 $set: {
-                    "course.progress": progress,
-                    "course.modComplete": mod,
+                    'course.progress': progress,
+                    'course.modComplete': mod,
                     "Module.$[element].mod_complete": true,
                 }},
                 { 
