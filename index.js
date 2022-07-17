@@ -231,7 +231,7 @@ async function run() {
                     "course.Module.$[element].mod_complete": true,
                 }},
                 { 
-                   arrayFilters: [ { element: index } ] }
+                   arrayFilters: [ { "element.module_name": index } ] }
             );
             console.log(data)
             res.send(data)
