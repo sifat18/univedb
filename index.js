@@ -270,6 +270,15 @@ async function run() {
 
 
         });
+        // get resumes by id
+        app.get('/candidate/:id', async (req, res) => {
+            const cursor = req.params.id
+            const filter = { _id: ObjectID(cursor) }
+
+            const resumeData = await resumeCollection.findOne(filter)
+            res.json(resumeData)
+
+        });
 
     } finally {
         // client.close()
