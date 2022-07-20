@@ -35,20 +35,20 @@ async function run() {
 
 
         // registering users for the first time
-        app.post('/user', async (req, res) => {
+        app.post('/api/user', async (req, res) => {
             const user = req.body;
             const result = await userCollection.insertOne(user);
             console.log('success');
             // res.json(result);
         });
         // getting all users 
-        app.get('/users', async (req, res) => {
+        app.get('/api/users', async (req, res) => {
             const userData = await userCollection.find({})
             const userDataArray = await userData.toArray()
             res.json(userDataArray)
         })
         //checking admin or not
-        app.get('/user/:email', async (req, res) => {
+        app.get('/api/user/:email', async (req, res) => {
             console.log('hitting admin/tutor check')
             const email = req.params.email;
             const query = { email: email };
@@ -67,7 +67,7 @@ async function run() {
             res.json({ admin: Isadmin, tutor: Istutor });
 
         });
-        app.put('/user', async (req, res) => {
+        app.put('/api/user', async (req, res) => {
             const user = req.body;
             const cursor = { email: user.email };
             const option = { upsert: true };
@@ -76,7 +76,7 @@ async function run() {
             // res.json(result);
             console.log('success put')
         });
-        app.put('/admin/:email', async (req, res) => {
+        app.put('/api/admin/:email', async (req, res) => {
 
             const email = req.params.email;
             const query = { email: email };
@@ -89,7 +89,7 @@ async function run() {
 
         });
         // tutor
-        app.put('/tutor/:email', async (req, res) => {
+        app.put('/api/tutor/:email', async (req, res) => {
 
             const email = req.params.email;
             const query = { email: email };
@@ -102,7 +102,7 @@ async function run() {
 
         });
         // get courses
-        app.get('/mycourse', async (req, res) => {
+        app.get('/api/mycourse', async (req, res) => {
             const { _id, email } = req.query
             // console.log(_id, email);
             const filter = { email: email, 'course._id': _id }
@@ -110,13 +110,13 @@ async function run() {
             const { course } = courseData
             res.json(course)
         })
-        app.get('/courses', async (req, res) => {
+        app.get('/api/courses', async (req, res) => {
             const courseData = await courseCollection.find({})
             const courseDataArray = await courseData.toArray()
             res.json(courseDataArray)
         })
         // course by id
-        app.get('/course/:id', async (req, res) => {
+        app.get('/api/course/:id', async (req, res) => {
             console.log('getting course by id')
             const cursor = req.params.id
             const filter = { _id: ObjectID(cursor) }
@@ -124,7 +124,7 @@ async function run() {
             res.json(courseData)
         })
         // courses by tag
-        app.get('/courses/:tag', async (req, res) => {
+        app.get('/api/courses/:tag', async (req, res) => {
             const tag = req.params.tag;
             const query = { tag: tag };
             const result = await courseCollection.find(query);
@@ -132,12 +132,12 @@ async function run() {
             res.json(courseDataArray)
         })
         // sending data to db
-        app.post('/courses', async (req, res) => {
+        app.post('/api/courses', async (req, res) => {
             const data = req.body
             const result = await courseCollection.insertOne(data);
             res.send(result.acknowledged)
         })
-        app.put('/courses/edit/:id', async (req, res) => {
+        app.put('/api/courses/edit/:id', async (req, res) => {
             const id = req.params.id;
             const data = req.body
             console.log('hit');
@@ -159,7 +159,7 @@ async function run() {
             res.send(result.acknowledged)
         })
         // registering users for the first time
-        app.post('/scholarship', async (req, res) => {
+        app.post('/api/scholarship', async (req, res) => {
             const { FullName, email, PhoneNumber, edu_qualification, platform_learn, scholarship_need } = req.body
             const pdf = req.files.pdf
             const pdfData = pdf.data
@@ -173,19 +173,19 @@ async function run() {
         });
 
         // sending recruit data to db
-        app.post('/recruit', async (req, res) => {
+        app.post('/api/recruit', async (req, res) => {
             const data = req.body
             const result = await recruitCollection.insertOne(data);
             res.send(result.acknowledged)
         })
         // sending organization data to db
-        app.post('/orgFrom', async (req, res) => {
+        app.post('/api/orgFrom', async (req, res) => {
             const data = req.body
             const result = await orgRecruitCollection.insertOne(data);
             res.send(result.acknowledged)
         })
         // sending instructor data to db
-        app.post('/instructor', async (req, res) => {
+        app.post('/api/instructor', async (req, res) => {
             const { FullName, email, PhoneNumber, subject } = req.body
             const pdf = req.files.pdf
             const pdfData = pdf.data
@@ -199,12 +199,12 @@ async function run() {
         })
 
         // sending instructorForm2 data to db
-        app.post('/instructorForm2', async (req, res) => {
+        app.post('/api/instructorForm2', async (req, res) => {
             const data = req.body
             const result = await instructorApplyCollection2.insertOne(data);
             res.send(result.acknowledged)
         })
-        app.post('/order', async (req, res) => {
+        app.post('/api/order', async (req, res) => {
             // console.log("posted")
             const query = req.body;
             query.course.progress = 0;
@@ -213,15 +213,15 @@ async function run() {
             // console.log(result)
             res.json(result)
         })
-        app.get('/order/:mail', async (req, res) => {
+        app.get('/api/order/:mail', async (req, res) => {
             const filter = req.params.mail;
             const query = { email: filter }
             const data = await orderCollection.find(query).toArray();
             res.send(data)
         })
-        app.put('/orderUpdate', async (req, res) => {
+        app.put('/api/orderUpdate', async (req, res) => {
             console.log('orderupdate put');
-            const {index,email, id, mod, progress } = req.body;
+            const { index, email, id, mod, progress } = req.body;
             // console.log(email, id, mod, progress);
             const filter = { email: email, 'course._id': id }
             const data = await orderCollection.updateOne(filter, {
@@ -229,16 +229,18 @@ async function run() {
                     'course.progress': progress,
                     'course.modComplete': mod,
                     "course.Module.$[element].mod_complete": true,
-                }},
-                { 
-                   arrayFilters: [ { "element.module_name": index } ] }
+                }
+            },
+                {
+                    arrayFilters: [{ "element.module_name": index }]
+                }
             );
             console.log(data)
             res.send(data)
         })
 
         // sending contributer data to db
-        app.post('/contributer', async (req, res) => {
+        app.post('/api/contributer', async (req, res) => {
             const { FullName, email, PhoneNumber, subject } = req.body
             const pdf = req.files.pdf
             const pdfData = pdf.data
@@ -252,7 +254,7 @@ async function run() {
         })
 
         // registering resumes 
-        app.put('/resume/:email', async (req, res) => {
+        app.put('/api/resume/:email', async (req, res) => {
             // console.log('hit', req.params.email);
             const data = req.body
             // console.log(data);
@@ -266,7 +268,7 @@ async function run() {
 
         });
         // get resumes 
-        app.get('/resume', async (req, res) => {
+        app.get('/api/resume', async (req, res) => {
             const resumeData = await resumeCollection.find({})
             const resumeDataArray = await resumeData.toArray()
             res.json(resumeDataArray)
@@ -274,7 +276,7 @@ async function run() {
 
         });
         // get resumes by id
-        app.get('/candidate/:id', async (req, res) => {
+        app.get('/api/candidate/:id', async (req, res) => {
             const cursor = req.params.id
             const filter = { _id: ObjectID(cursor) }
 
@@ -288,7 +290,7 @@ async function run() {
     }
 }
 run().catch(console.dir)
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
     res.send('connected')
 })
 app.listen(port, () => console.log('connected at ', port))
