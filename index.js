@@ -43,7 +43,7 @@ async function run() {
         });
         // registering active status 
         app.put('/api/active', async (req, res) => {
-            const { email, status } = req.query
+            const { email, status } = req.body
             const query = { email: email };
             const updateDoc = { $set: { active: status } };
             const result = await userCollection.updateOne(query, updateDoc);
