@@ -41,6 +41,16 @@ async function run() {
             console.log('success');
             // res.json(result);
         });
+        // registering active status 
+        app.post('/api/active', async (req, res) => {
+            const { email, status } = req.query
+            const query = { email: email };
+            const option = { upsert: true };
+            const updateDoc = { $set: { active: status } };
+            const result = await userCollection.updateOne(query, updateDoc, option);
+            console.log(result.modifiedCount);
+            // res.json(result);
+        });
         // getting all users 
         app.get('/api/users', async (req, res) => {
             const userData = await userCollection.find({})
