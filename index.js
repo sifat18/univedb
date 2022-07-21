@@ -42,7 +42,7 @@ async function run() {
             // res.json(result);
         });
         // registering active status 
-        app.post('/api/active', async (req, res) => {
+        app.put('/api/active', async (req, res) => {
             const { email, status } = req.query
             const query = { email: email };
             const option = { upsert: true };
