@@ -45,10 +45,9 @@ async function run() {
         app.put('/api/active', async (req, res) => {
             const { email, status } = req.query
             const query = { email: email };
-            const option = { upsert: true };
             const updateDoc = { $set: { active: status } };
-            const result = await userCollection.updateOne(query, updateDoc, option);
-            console.log(result.modifiedCount);
+            const result = await userCollection.updateOne(query, updateDoc);
+            console.log(result);
             // res.json(result);
         });
         // getting all users 
