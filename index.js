@@ -37,9 +37,10 @@ async function run() {
         // registering users for the first time
         app.post('/api/user', async (req, res) => {
             const user = req.body;
+            user.active=true
             const result = await userCollection.insertOne(user);
             console.log('success');
-            // res.json(result);
+            res.json(result);
         });
         // registering active status 
         app.put('/api/active', async (req, res) => {
@@ -48,7 +49,7 @@ async function run() {
             const updateDoc = { $set: { active: status } };
             const result = await userCollection.updateOne(query, updateDoc);
             console.log(result);
-            // res.json(result);
+            res.json(result);
         });
         // getting all users 
         app.get('/api/users', async (req, res) => {
