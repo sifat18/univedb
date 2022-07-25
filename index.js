@@ -37,7 +37,7 @@ async function run() {
         // registering users for the first time
         app.post('/api/user', async (req, res) => {
             const user = req.body;
-            user.active=true
+            user.active = true
             const result = await userCollection.insertOne(user);
             console.log('success');
             res.json(result);
@@ -129,7 +129,7 @@ async function run() {
         app.get('/api/course/:id', async (req, res) => {
             console.log('getting course by id')
             const cursor = req.params.id
-            const filter = { _id: ObjectID(cursor) }
+            const filter = { coursename: cursor }
             const courseData = await courseCollection.findOne(filter)
             res.json(courseData)
         })
