@@ -231,11 +231,22 @@ async function run() {
         app.post('/api/order', async (req, res) => {
             // console.log("posted")
             const query = req.body;
-            query.course.progress = 0;
-            query.course.modComplete = 0;
-            const result = await orderCollection.insertOne(query);
-            // console.log(result)
-            res.json(result)
+            const { course, email } = query
+            console.log(course.coursename);
+            const filter = { email: email, 'course.coursename': course.coursename }
+
+            const check = await orderCollection.findOne(filter);
+            if (check) {
+                let insertedId = 0
+                res.json({ insertedId })
+            } else {
+                query.course.progress = 0;
+                query.course.modComplete = 0;
+                const result = await orderCollection.insertOne(query);
+                // console.log(result)
+                res.json(result)
+            };
+
         })
         app.get('/api/order/:mail', async (req, res) => {
             const filter = req.params.mail;
