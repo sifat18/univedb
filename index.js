@@ -40,15 +40,22 @@ async function run() {
         app.post('/api/user', async (req, res) => {
             const user = req.body;
             user.active = true
+            let time = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+            user.firstLogin = time
+            console.log(user.firstLogin);
+            user.date = time
             const result = await userCollection.insertOne(user);
             console.log('success');
             res.json(result);
         });
         // registering active status 
         app.put('/api/active', async (req, res) => {
+            console.log('hit');
             const { email, status } = req.body
             const query = { email: email };
-            const updateDoc = { $set: { active: status } };
+            let time = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+            const updateDoc = { $set: { "active": status, "date": time } };
+            console.log('daon');
             const result = await userCollection.updateOne(query, updateDoc);
             console.log(result);
             res.json(result);
@@ -81,6 +88,8 @@ async function run() {
         });
         app.put('/api/user', async (req, res) => {
             const user = req.body;
+            let time = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+            user.firstLogin = time
             const cursor = { email: user.email };
             const option = { upsert: true };
             const updateDoc = { $set: user };
