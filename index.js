@@ -122,6 +122,19 @@ async function run() {
 
 
         });
+        // employer
+        app.put('/api/employer/:email', async (req, res) => {
+            console.log('hit employer');
+            const email = req.params.email;
+            const query = { email: email };
+            // const result = await userCollection.findOne(query);
+            const updateDoc = { $set: { role: 'employer' } };
+            const result = await userCollection.updateOne(query, updateDoc);
+            res.json(result);
+
+
+
+        });
         // get courses
         app.get('/api/mycourse', async (req, res) => {
             const { _id, email } = req.query
