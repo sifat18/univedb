@@ -27,6 +27,7 @@ async function run() {
         const userCollection = univeDb.collection('users')
         const recruitCollection = univeDb.collection('recruits')
         const demoCollection = univeDb.collection('demo')
+        const employerCollection = univeDb.collection('employer')
         const enterpriceCollection = univeDb.collection('enterprice')
         const orgRecruitCollection = univeDb.collection('recruitOrg')
         const instructorApplyCollection = univeDb.collection('instructorAply')
@@ -221,6 +222,13 @@ async function run() {
         app.post('/api/demo', async (req, res) => {
             const data = req.body
             const result = await demoCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
+        // employer profile
+        app.post('/api/employerProfile', async (req, res) => {
+            const data = req.body
+            console.log('inside profile');
+            const result = await employerCollection.insertOne(data);
             res.send(result.acknowledged)
         })
         // sending demo request data to db
