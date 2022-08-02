@@ -74,6 +74,7 @@ async function run() {
             const result = await userCollection.findOne(query);
             let Isadmin = false;
             let Istutor = false;
+            let IsEmployer = false;
             if (result?.role == 'admin') {
                 Isadmin = true
                 // res.json({ admin: Isadmin, tutor: false });
@@ -82,8 +83,12 @@ async function run() {
                 Istutor = true
                 // res.json({ admin: false, tutor: Istutor });
             }
+            else if (result?.role == 'employer') {
+                IsEmployer = true
+                // res.json({ admin: false, tutor: Istutor });
+            }
             console.log('success');
-            res.json({ admin: Isadmin, tutor: Istutor });
+            res.json({ admin: Isadmin, tutor: Istutor, employer: IsEmployer });
 
         });
         app.put('/api/user', async (req, res) => {
