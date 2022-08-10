@@ -31,7 +31,6 @@ async function run() {
         const enterpriceCollection = univeDb.collection('enterprice')
         const orgRecruitCollection = univeDb.collection('recruitOrg')
         const instructorApplyCollection = univeDb.collection('instructorAply')
-        const instructorApplyCollection2 = univeDb.collection('instructorAply2')
         const scholarshipCollection = univeDb.collection('scholarships')
         const contributerApplyCollection = univeDb.collection('contributerAply')
 
@@ -211,18 +210,37 @@ async function run() {
             const result = await scholarshipCollection.insertOne(data);
             res.json(result)
         });
+         // getting scholarshi[] time
+         app.get('/api/scholarship', async (req, res) => {
+            const result = await scholarshipCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
+        });
 
-        // sending recruit data to db
-        app.post('/api/recruit', async (req, res) => {
+        // data to db data of those want to talk with representative  
+        app.post('/api/representative', async (req, res) => {
             const data = req.body
             const result = await recruitCollection.insertOne(data);
             res.send(result.acknowledged)
+        })
+        // getting data of those want to talk with representative  
+
+        app.get('/api/representative', async (req, res) => {
+            const result = await recruitCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
         })
         // sending demo request data to db
         app.post('/api/demo', async (req, res) => {
             const data = req.body
             const result = await demoCollection.insertOne(data);
             res.send(result.acknowledged)
+        })
+        // getting demo request data to db
+        app.get('/api/demo', async (req, res) => {
+            const result = await demoCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
         })
         // employer profile
         app.post('/api/employerProfile', async (req, res) => {
@@ -231,17 +249,29 @@ async function run() {
             const result = await employerCollection.insertOne(data);
             res.send(result.acknowledged)
         })
-        // sending demo request data to db
+        // sending price request data to db
         app.post('/api/enterprice', async (req, res) => {
             const data = req.body
             const result = await enterpriceCollection.insertOne(data);
             res.send(result.acknowledged)
         })
-        // sending organization data to db
-        app.post('/api/orgFrom', async (req, res) => {
+        // getting price request data to db
+        app.get('/api/enterprice', async (req, res) => {
+            const result = await enterpriceCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
+        })
+        // sending organization that want to try unive recruitment
+        app.post('/api/unive_recruitement', async (req, res) => {
             const data = req.body
             const result = await orgRecruitCollection.insertOne(data);
             res.send(result.acknowledged)
+        })
+        // getting organization data from db
+        app.get('/api/unive_recruitement', async (req, res) => {
+            const result = await orgRecruitCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
         })
         // sending instructor data to db
         app.post('/api/instructor', async (req, res) => {
@@ -256,13 +286,20 @@ async function run() {
             const result = await instructorApplyCollection.insertOne(data);
             res.send(result)
         })
+        // want to be unive instructor
+        app.get('/api/instructor', async (req, res) => {
+            const result = await instructorApplyCollection.find({});
+            const resultArray = await result.toArray()
+
+            res.json(resultArray)
+        })
 
         // sending instructorForm2 data to db
-        app.post('/api/instructorForm2', async (req, res) => {
-            const data = req.body
-            const result = await instructorApplyCollection2.insertOne(data);
-            res.send(result.acknowledged)
-        })
+        // app.post('/api/instructorForm2', async (req, res) => {
+        //     const data = req.body
+        //     const result = await instructorApplyCollection2.insertOne(data);
+        //     res.send(result.acknowledged)
+        // })
         app.post('/api/order', async (req, res) => {
             // console.log("posted")
             const query = req.body;
@@ -321,6 +358,13 @@ async function run() {
             }
             const result = await contributerApplyCollection.insertOne(data);
             res.send(result)
+        })
+        // geting contributer data 
+        app.get('/api/contributer', async (req, res) => {
+            const result = await contributerApplyCollection.find({});
+            const resultArray = await result.toArray()
+
+            res.json(resultArray)
         })
 
         // registering resumes 
