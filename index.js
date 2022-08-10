@@ -276,16 +276,25 @@ async function run() {
         // sending instructor data to db
         app.post('/api/instructor', async (req, res) => {
             const { FullName, email, PhoneNumber, subject } = req.body
-            const pdf = req.files.pdf
-            const pdfData = pdf.data
-            const encodedPdf = pdfData.toString('base64')
-            const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
-            const data = {
-                FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
-            }
+            if(req.files.pdf){
+                const pdf = req.files.pdf
+                const pdfData = pdf.data 
+    
+                const encodedPdf = pdfData.toString('base64')
+                const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
+                const data = {
+                    FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
+                }
             const result = await instructorApplyCollection.insertOne(data);
             res.send(result)
-        })
+
+            }else{
+                const data = {
+                    FullName, email, PhoneNumber, subject
+                }
+            const result = await instructorApplyCollection.insertOne(data);
+            res.send(result)
+        }})
         // want to be unive instructor
         app.get('/api/instructor', async (req, res) => {
             const result = await instructorApplyCollection.find({});
