@@ -202,10 +202,11 @@ async function run() {
             const { FullName, email, PhoneNumber, edu_qualification, platform_learn, scholarship_need } = req.body
             const pdf = req.files.pdf
             const pdfData = pdf.data
+            let status='pending'
             const encodedPdf = pdfData.toString('base64')
             const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
             const data = {
-                FullName, email, PhoneNumber, edu_qualification, platform_learn, scholarship_need, pdf: Pdfbuffer
+                FullName, email, status, PhoneNumber, edu_qualification, platform_learn, scholarship_need, pdf: Pdfbuffer
             }
             const result = await scholarshipCollection.insertOne(data);
             res.json(result)
@@ -220,6 +221,7 @@ async function run() {
         // data to db data of those want to talk with representative  
         app.post('/api/representative', async (req, res) => {
             const data = req.body
+            data.status='pending'
             const result = await recruitCollection.insertOne(data);
             res.send(result.acknowledged)
         })
@@ -233,6 +235,7 @@ async function run() {
         // sending demo request data to db
         app.post('/api/demo', async (req, res) => {
             const data = req.body
+            data.status='pending'
             const result = await demoCollection.insertOne(data);
             res.send(result.acknowledged)
         })
@@ -252,6 +255,7 @@ async function run() {
         // sending price request data to db
         app.post('/api/enterprice', async (req, res) => {
             const data = req.body
+            data.status='pending'
             const result = await enterpriceCollection.insertOne(data);
             res.send(result.acknowledged)
         })
@@ -264,6 +268,7 @@ async function run() {
         // sending organization that want to try unive recruitment
         app.post('/api/unive_recruitement', async (req, res) => {
             const data = req.body
+            data.status='pending'
             const result = await orgRecruitCollection.insertOne(data);
             res.send(result.acknowledged)
         })
@@ -278,10 +283,11 @@ async function run() {
             const { FullName, email, PhoneNumber, subject } = req.body
             const pdf = req.files.pdf
             const pdfData = pdf.data
+           let status='pending'
             const encodedPdf = pdfData.toString('base64')
             const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
             const data = {
-                FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
+                FullName, email,status, PhoneNumber, subject, pdf: Pdfbuffer
             }
             const result = await instructorApplyCollection.insertOne(data);
             res.send(result)
@@ -351,10 +357,11 @@ async function run() {
             const { FullName, email, PhoneNumber, subject } = req.body
             const pdf = req.files.pdf
             const pdfData = pdf.data
-            const encodedPdf = pdfData.toString('base64')
+           let status='pending'
+           const encodedPdf = pdfData.toString('base64')
             const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
             const data = {
-                FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
+                FullName, email,status, PhoneNumber, subject, pdf: Pdfbuffer
             }
             const result = await contributerApplyCollection.insertOne(data);
             res.send(result)
