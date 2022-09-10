@@ -27,10 +27,10 @@ async function run() {
         const userCollection = univeDb.collection('users')
         const recruitCollection = univeDb.collection('recruits')
         const demoCollection = univeDb.collection('demo')
+        const employerCollection = univeDb.collection('employer')
         const enterpriceCollection = univeDb.collection('enterprice')
         const orgRecruitCollection = univeDb.collection('recruitOrg')
         const instructorApplyCollection = univeDb.collection('instructorAply')
-        const instructorApplyCollection2 = univeDb.collection('instructorAply2')
         const scholarshipCollection = univeDb.collection('scholarships')
         const contributerApplyCollection = univeDb.collection('contributerAply')
 
@@ -40,15 +40,22 @@ async function run() {
         app.post('/api/user', async (req, res) => {
             const user = req.body;
             user.active = true
+            let time = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+            user.firstLogin = time
+            console.log(user.firstLogin);
+            user.date = time
             const result = await userCollection.insertOne(user);
             console.log('success');
             res.json(result);
         });
         // registering active status 
         app.put('/api/active', async (req, res) => {
+            console.log('hit');
             const { email, status } = req.body
             const query = { email: email };
-            const updateDoc = { $set: { active: status } };
+            let time = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+            const updateDoc = { $set: { "active": status, "date": time } };
+            console.log('daon');
             const result = await userCollection.updateOne(query, updateDoc);
             console.log(result);
             res.json(result);
@@ -67,6 +74,7 @@ async function run() {
             const result = await userCollection.findOne(query);
             let Isadmin = false;
             let Istutor = false;
+            let IsEmployer = false;
             if (result?.role == 'admin') {
                 Isadmin = true
                 // res.json({ admin: Isadmin, tutor: false });
@@ -75,12 +83,18 @@ async function run() {
                 Istutor = true
                 // res.json({ admin: false, tutor: Istutor });
             }
+            else if (result?.role == 'employer') {
+                IsEmployer = true
+                // res.json({ admin: false, tutor: Istutor });
+            }
             console.log('success');
-            res.json({ admin: Isadmin, tutor: Istutor });
+            res.json({ admin: Isadmin, tutor: Istutor, employer: IsEmployer });
 
         });
         app.put('/api/user', async (req, res) => {
             const user = req.body;
+            let time = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+            user.firstLogin = time
             const cursor = { email: user.email };
             const option = { upsert: true };
             const updateDoc = { $set: user };
@@ -107,6 +121,19 @@ async function run() {
             const query = { email: email };
             // const result = await userCollection.findOne(query);
             const updateDoc = { $set: { role: 'tutor' } };
+            const result = await userCollection.updateOne(query, updateDoc);
+            res.json(result);
+
+
+
+        });
+        // employer
+        app.put('/api/employer/:email', async (req, res) => {
+            console.log('hit employer');
+            const email = req.params.email;
+            const query = { email: email };
+            // const result = await userCollection.findOne(query);
+            const updateDoc = { $set: { role: 'employer' } };
             const result = await userCollection.updateOne(query, updateDoc);
             res.json(result);
 
@@ -175,67 +202,129 @@ async function run() {
             const { FullName, email, PhoneNumber, edu_qualification, platform_learn, scholarship_need } = req.body
             const pdf = req.files.pdf
             const pdfData = pdf.data
+            let status='pending'
             const encodedPdf = pdfData.toString('base64')
             const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
             const data = {
-                FullName, email, PhoneNumber, edu_qualification, platform_learn, scholarship_need, pdf: Pdfbuffer
+                FullName, email, status, PhoneNumber, edu_qualification, platform_learn, scholarship_need, pdf: Pdfbuffer
             }
             const result = await scholarshipCollection.insertOne(data);
             res.json(result)
         });
+         // getting scholarshi[] time
+         app.get('/api/scholarship', async (req, res) => {
+            const result = await scholarshipCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
+        });
 
-        // sending recruit data to db
-        app.post('/api/recruit', async (req, res) => {
+        // data to db data of those want to talk with representative  
+        app.post('/api/representative', async (req, res) => {
             const data = req.body
+            data.status='pending'
             const result = await recruitCollection.insertOne(data);
             res.send(result.acknowledged)
+        })
+        // getting data of those want to talk with representative  
+
+        app.get('/api/representative', async (req, res) => {
+            const result = await recruitCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
         })
         // sending demo request data to db
         app.post('/api/demo', async (req, res) => {
             const data = req.body
+            data.status='pending'
             const result = await demoCollection.insertOne(data);
             res.send(result.acknowledged)
         })
-        // sending demo request data to db
+        // getting demo request data to db
+        app.get('/api/demo', async (req, res) => {
+            const result = await demoCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
+        })
+        // employer profile
+        app.post('/api/employerProfile', async (req, res) => {
+            const data = req.body
+            console.log('inside profile');
+            const result = await employerCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
+        // sending price request data to db
         app.post('/api/enterprice', async (req, res) => {
             const data = req.body
+            data.status='pending'
             const result = await enterpriceCollection.insertOne(data);
             res.send(result.acknowledged)
         })
-        // sending organization data to db
-        app.post('/api/orgFrom', async (req, res) => {
+        // getting price request data to db
+        app.get('/api/enterprice', async (req, res) => {
+            const result = await enterpriceCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
+        })
+        // sending organization that want to try unive recruitment
+        app.post('/api/unive_recruitement', async (req, res) => {
             const data = req.body
+            data.status='pending'
             const result = await orgRecruitCollection.insertOne(data);
             res.send(result.acknowledged)
+        })
+        // getting organization data from db
+        app.get('/api/unive_recruitement', async (req, res) => {
+            const result = await orgRecruitCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
         })
         // sending instructor data to db
         app.post('/api/instructor', async (req, res) => {
             const { FullName, email, PhoneNumber, subject } = req.body
             const pdf = req.files.pdf
             const pdfData = pdf.data
+           let status='pending'
             const encodedPdf = pdfData.toString('base64')
             const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
             const data = {
-                FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
+                FullName, email,status, PhoneNumber, subject, pdf: Pdfbuffer
             }
             const result = await instructorApplyCollection.insertOne(data);
             res.send(result)
         })
+        // want to be unive instructor
+        app.get('/api/instructor', async (req, res) => {
+            const result = await instructorApplyCollection.find({});
+            const resultArray = await result.toArray()
+
+            res.json(resultArray)
+        })
 
         // sending instructorForm2 data to db
-        app.post('/api/instructorForm2', async (req, res) => {
-            const data = req.body
-            const result = await instructorApplyCollection2.insertOne(data);
-            res.send(result.acknowledged)
-        })
+        // app.post('/api/instructorForm2', async (req, res) => {
+        //     const data = req.body
+        //     const result = await instructorApplyCollection2.insertOne(data);
+        //     res.send(result.acknowledged)
+        // })
         app.post('/api/order', async (req, res) => {
             // console.log("posted")
             const query = req.body;
-            query.course.progress = 0;
-            query.course.modComplete = 0;
-            const result = await orderCollection.insertOne(query);
-            // console.log(result)
-            res.json(result)
+            const { course, email } = query
+            console.log(course.coursename);
+            const filter = { email: email, 'course.coursename': course.coursename }
+
+            const check = await orderCollection.findOne(filter);
+            if (check) {
+                let insertedId = 0
+                res.json({ insertedId })
+            } else {
+                query.course.progress = 0;
+                query.course.modComplete = 0;
+                const result = await orderCollection.insertOne(query);
+                // console.log(result)
+                res.json(result)
+            };
+
         })
         app.get('/api/order/:mail', async (req, res) => {
             const filter = req.params.mail;
@@ -268,13 +357,21 @@ async function run() {
             const { FullName, email, PhoneNumber, subject } = req.body
             const pdf = req.files.pdf
             const pdfData = pdf.data
-            const encodedPdf = pdfData.toString('base64')
+           let status='pending'
+           const encodedPdf = pdfData.toString('base64')
             const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
             const data = {
-                FullName, email, PhoneNumber, subject, pdf: Pdfbuffer
+                FullName, email,status, PhoneNumber, subject, pdf: Pdfbuffer
             }
             const result = await contributerApplyCollection.insertOne(data);
             res.send(result)
+        })
+        // geting contributer data 
+        app.get('/api/contributer', async (req, res) => {
+            const result = await contributerApplyCollection.find({});
+            const resultArray = await result.toArray()
+
+            res.json(resultArray)
         })
 
         // registering resumes 
