@@ -154,7 +154,7 @@ async function run() {
             const data = req.body
             console.log('hit');
             // console.log(data);
-            const filter = { _id: ObjectID(id) };
+            const filter = { coursename: id }
             const { _id, ...rest } = { ...data }
             // dont need the commented lines 
             // const option = { upsert: true };
