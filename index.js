@@ -162,6 +162,13 @@ async function run() {
             const courseData = await courseCollection.findOne(filter)
             res.json(courseData)
         })
+        // delete course by id
+        app.delete('/api/course/:id', async (req, res) => {
+            const cursor = req.params.id
+            const filter = { coursename: cursor }
+            const data = await courseCollection.deleteOne(filter)
+            res.send(data)
+        })
         // courses by tag
         app.get('/api/courses/:tag', async (req, res) => {
             const tag = req.params.tag;
