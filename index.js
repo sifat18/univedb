@@ -20,6 +20,7 @@ async function run() {
         const univeDb = client.db('unive')
         const courseCollection = univeDb.collection('courses')
         const orderCollection = univeDb.collection('orders')
+        const deletedCourseCollection = univeDb.collection('deletedCourses')
 
         // const reviewCollection = titanDB.collection('reviews')
         // const orderCollection = titanDB.collection('orders')
@@ -181,6 +182,11 @@ async function run() {
         app.post('/api/courses', async (req, res) => {
             const data = req.body
             const result = await courseCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
+        app.post('/api/deletedcourses', async (req, res) => {
+            const data = req.body
+            const result = await deletedCourseCollection.insertOne(data);
             res.send(result.acknowledged)
         })
         app.put('/api/courses/edit/:id', async (req, res) => {
