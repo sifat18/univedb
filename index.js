@@ -189,6 +189,17 @@ async function run() {
             const result = await deletedCourseCollection.insertOne(data);
             res.send(result.acknowledged)
         })
+        app.delete('/api/deletedcourses/:id', async (req, res) => {
+            const cursor = req.params.id
+            const filter = { coursename: cursor }
+            const data = await deletedCourseCollection.deleteOne(filter)
+            res.send(data)
+        })
+        app.get('/api/deletedcourses', async (req, res) => {
+            const result = await deletedCourseCollection.find({})
+            const resultDataArray = await result.toArray()
+            res.json(resultDataArray)
+        })
         app.put('/api/courses/edit/:id', async (req, res) => {
             const id = req.params.id;
             const data = req.body
