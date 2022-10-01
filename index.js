@@ -29,6 +29,7 @@ async function run() {
         const recruitCollection = univeDb.collection('recruits')
         const demoCollection = univeDb.collection('demo')
         const employerCollection = univeDb.collection('employer')
+        const jobCollection = univeDb.collection('jobpost')
         const enterpriceCollection = univeDb.collection('enterprice')
         const orgRecruitCollection = univeDb.collection('recruitOrg')
         const instructorApplyCollection = univeDb.collection('instructorAply')
@@ -275,6 +276,18 @@ async function run() {
             console.log('inside profile');
             const result = await employerCollection.insertOne(data);
             res.send(result.acknowledged)
+        })
+        // job post
+        app.post('/api/jobpost', async (req, res) => {
+            const data = req.body
+            console.log('inside profile');
+            const result = await jobCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
+        app.get('/api/jobpost', async (req, res) => {
+            const result = await jobCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
         })
         // sending price request data to db
         app.post('/api/enterprice', async (req, res) => {
