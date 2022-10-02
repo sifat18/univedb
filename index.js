@@ -289,6 +289,14 @@ async function run() {
             const resultArray = await result.toArray()
             res.json(resultArray)
         })
+        app.get('/api/jobpost/:id', async (req, res) => {
+            const cursor = req.params.id
+            const filter = { _id: ObjectID(cursor) }
+            const result = await jobCollection.findOne(filter)
+            res.json(result)
+        })
+        
+
         // sending price request data to db
         app.post('/api/enterprice', async (req, res) => {
             const data = req.body
