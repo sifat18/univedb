@@ -301,7 +301,7 @@ async function run() {
             // console.log("posted")
             const query = req.body;
             const { jobData, email } = query
-            const filter = { email: email, 'jobData._id': ObjectID(jobData._id)  }
+            const filter = { email: email, 'jobData._id': jobData._id  }
 
             const check = await jobApplyCollection.findOne(filter);
             if (check) {
