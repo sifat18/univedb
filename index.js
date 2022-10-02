@@ -30,6 +30,7 @@ async function run() {
         const demoCollection = univeDb.collection('demo')
         const employerCollection = univeDb.collection('employer')
         const jobCollection = univeDb.collection('jobpost')
+        const jobApplyCollection = univeDb.collection('jobapply')
         const enterpriceCollection = univeDb.collection('enterprice')
         const orgRecruitCollection = univeDb.collection('recruitOrg')
         const instructorApplyCollection = univeDb.collection('instructorAply')
@@ -296,7 +297,29 @@ async function run() {
             res.json(result)
         })
         
+        app.post('/api/jobApply', async (req, res) => {
+            // console.log("posted")
+            const query = req.body;
+            const { jobData, email } = query
+            const filter = { email: email, _id: ObjectID(jobData._id)  }
 
+            const check = await jobApplyCollection.findOne(filter);
+            if (check) {
+                let insertedId = 0
+                res.json({ insertedId })
+            } else {
+                const result = await jobApplyCollection.insertOne(query);
+                // console.log(result)
+                res.json(result)
+            };
+
+        })
+        app.get('/api/jobApply/:mail', async (req, res) => {
+            const filter = req.params.mail;
+            const query = { email: filter }
+            const data = await jobApplyCollection.find(query).toArray();
+            res.send(data)
+        })
         // sending price request data to db
         app.post('/api/enterprice', async (req, res) => {
             const data = req.body
