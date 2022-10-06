@@ -310,6 +310,15 @@ async function run() {
 
 
         });
+         app.delete('/api/delete_job/:id', async (req, res) => {
+            const cursor = req.params.id
+            const filter = { coursename: cursor }
+            const data = await jobCollection.deleteOne(filter)
+            res.send(data)
+
+
+        });
+
         
         app.post('/api/jobApply', async (req, res) => {
             // console.log("posted")
