@@ -304,7 +304,7 @@ async function run() {
             const filter = { _id: ObjectID(cursor) }
             const option = { upsert: true };
             const updateDoc = { ...rest }
-            const result = await resumeCollection.replaceOne(filter, updateDoc, option);
+            const result = await jobCollection.replaceOne(filter, updateDoc, option);
             console.log(result);
             res.send(result.acknowledged);
 
