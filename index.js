@@ -296,6 +296,20 @@ async function run() {
             const result = await jobCollection.findOne(filter)
             res.json(result)
         })
+         // registering resumes 
+         app.put('/api/jobpost/edit/:id', async (req, res) => {
+            const cursor = req.params.id
+            const {_id,...rest} = req.body
+            // console.log(data);
+            const filter = { _id: ObjectID(cursor) }
+            const option = { upsert: true };
+            const updateDoc = { ...rest }
+            const result = await resumeCollection.replaceOne(filter, updateDoc, option);
+            console.log(result);
+            res.send(result.acknowledged);
+
+
+        });
         
         app.post('/api/jobApply', async (req, res) => {
             // console.log("posted")
