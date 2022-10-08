@@ -420,7 +420,7 @@ async function run() {
             const {status}  = req.body
             const filter = { _id: ObjectID(cursor) }
             const updateDoc = { $set: { "status": status } };
-            const result = await orgRecruitCollection.updateOne(filter, updateDoc);
+            const result = await courseRemoveRequestCollection.updateOne(filter, updateDoc);
             res.send(result.acknowledged);
 
         })
