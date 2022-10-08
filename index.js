@@ -464,7 +464,15 @@ async function run() {
 
             res.json(resultArray)
         })
+        //edit status contributer 
+        app.put('/api/contributer/edit/:id', async (req, res) => {
+            const cursor = req.params.id
+            const filter = { _id: ObjectID(cursor) }
+            const updateDoc = { $set: { status: req.query.status } };
+            const result = await contributerApplyCollection.updateOne(filter, updateDoc);
+            res.send(result.acknowledged);
 
+        })
         // registering resumes 
         app.put('/api/resume/:email', async (req, res) => {
             // console.log('hit', req.params.email);
