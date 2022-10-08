@@ -467,7 +467,7 @@ async function run() {
         //edit status contributer 
         app.put('/api/contributer/edit/:id', async (req, res) => {
             const cursor = req.params.id
-            const { status } = req.body
+            const status  = req.body.status
 
             const filter = { _id: ObjectID(cursor) }
             const updateDoc = { $set: { "status": status } };
