@@ -468,7 +468,7 @@ async function run() {
         app.put('/api/contributer/edit/:id', async (req, res) => {
             const cursor = req.params.id
             const filter = { _id: ObjectID(cursor) }
-            const updateDoc = { $set: { status: req.body.status } };
+            const updateDoc = { $set: { status: req.body } };
             const result = await contributerApplyCollection.updateOne(filter, updateDoc);
             res.send(result.acknowledged);
 
