@@ -36,6 +36,7 @@ async function run() {
         const instructorApplyCollection = univeDb.collection('instructorAply')
         const scholarshipCollection = univeDb.collection('scholarships')
         const contributerApplyCollection = univeDb.collection('contributerAply')
+        const courseRemoveRequestCollection = univeDb.collection('courseRemove')
 
 
 
@@ -401,6 +402,18 @@ async function run() {
             data.status='pending'
             const result = await orgRecruitCollection.insertOne(data);
             res.send(result.acknowledged)
+        })
+        // course_remove
+        app.post('/api/course_delete', async (req, res) => {
+            const data = req.body
+            data.status='pending'
+            const result = await courseRemoveRequestCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
+        app.get('/api/course_delete', async (req, res) => {
+            const result = await courseRemoveRequestCollection.find({});
+            const resultArray = await result.toArray()
+            res.json(resultArray)
         })
         // getting organization data from db
         app.get('/api/unive_recruitement', async (req, res) => {
