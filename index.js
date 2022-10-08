@@ -415,6 +415,15 @@ async function run() {
             const resultArray = await result.toArray()
             res.json(resultArray)
         })
+        app.put('/api/course_delete/edit/:id', async (req, res) => {
+            const cursor = req.params.id
+            const {status}  = req.body
+            const filter = { _id: ObjectID(cursor) }
+            const updateDoc = { $set: { "status": status } };
+            const result = await orgRecruitCollection.updateOne(filter, updateDoc);
+            res.send(result.acknowledged);
+
+        })
         // getting organization data from db
         app.get('/api/unive_recruitement', async (req, res) => {
             const result = await orgRecruitCollection.find({});
