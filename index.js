@@ -29,6 +29,7 @@ async function run() {
         const recruitCollection = univeDb.collection('recruits')
         const demoCollection = univeDb.collection('demo')
         const employerCollection = univeDb.collection('employer')
+        const tutorCollection = univeDb.collection('tutor')
         const jobCollection = univeDb.collection('jobpost')
         const jobApplyCollection = univeDb.collection('jobapply')
         const enterpriceCollection = univeDb.collection('enterprice')
@@ -415,7 +416,12 @@ async function run() {
 
             res.json(resultArray)
         })
-
+        app.post('/api/tutorProfile', async (req, res) => {
+            const data = req.body
+            console.log('inside profile');
+            const result = await tutorCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
         // sending instructorForm2 data to db
         // app.post('/api/instructorForm2', async (req, res) => {
         //     const data = req.body
