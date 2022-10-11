@@ -310,6 +310,13 @@ async function run() {
 
 
         });
+        app.get('/api/employer_posted/:email', async (req, res) => {
+            const cursor = req.params.email
+            const filter = {'jobData.jobCreator': cursor }
+            const result = await jobApplyCollection.find(filter)
+            const resultDataArray = await result.toArray()
+            res.json(resultDataArray)
+        })
          app.delete('/api/delete_job/:id', async (req, res) => {
             const cursor = req.params.id
             const filter = { _id: ObjectID(cursor) }
