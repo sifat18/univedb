@@ -417,8 +417,15 @@ async function run() {
             res.json(resultArray)
         })
         app.post('/api/tutorProfile', async (req, res) => {
-            const data = req.body
-            console.log('inside profile');
+            const { name, email, PhoneNumber, topic,imgLink } = req.body
+            const pdf = req.files.pdf
+            const pdfData = pdf.data
+           let status='pending'
+           const encodedPdf = pdfData.toString('base64')
+            const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
+            const data = {
+                name, email, PhoneNumber, topic,imgLink, pdf: Pdfbuffer
+            }
             const result = await tutorCollection.insertOne(data);
             res.send(result.acknowledged)
         })
