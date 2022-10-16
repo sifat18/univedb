@@ -356,7 +356,7 @@ async function run() {
             const encodedPdf = pdfData.toString('base64')
             const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
             const data = {
-                 email,jobData, pdf: Pdfbuffer
+                 email,jobData,status, pdf: Pdfbuffer
             }
 
             const result = await jobApplyCollection.insertOne(data);
@@ -368,6 +368,21 @@ async function run() {
             const query = { email: filter }
             const data = await jobApplyCollection.find(query).toArray();
             res.send(data)
+        })
+        app.patch('/api/jobApply/:mail/:id', async (req, res) => {
+            const mail = req.params.mail;
+            const id = req.params.id;
+            const status = req.body;
+            const query = { email: mail, _id: ObjectID(id)}
+            const data = await jobApplyCollection.updateOne(query, {
+                $set: {
+                    'status': status,
+                }
+            },
+                
+            );
+            console.log(data)
+            res.send(data.acknowledged)
         })
         // sending price request data to db
         app.post('/api/enterprice', async (req, res) => {
