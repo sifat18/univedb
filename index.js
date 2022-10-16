@@ -371,7 +371,7 @@ async function run() {
         })
         app.patch('/api/jobApply/edit/:id', async (req, res) => {
             const id = req.params.id;
-            const status = req.body;
+            const status = req.body.status;
             const query = {_id: ObjectID(id)}
             const data = await jobApplyCollection.updateOne(query, {
                 $set: {
