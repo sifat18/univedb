@@ -369,11 +369,10 @@ async function run() {
             const data = await jobApplyCollection.find(query).toArray();
             res.send(data)
         })
-        app.patch('/api/jobApply/:mail/:id', async (req, res) => {
-            const mail = req.params.mail;
+        app.patch('/api/jobApply/edit/:id', async (req, res) => {
             const id = req.params.id;
             const status = req.body;
-            const query = { email: mail, _id: ObjectID(id)}
+            const query = {_id: ObjectID(id)}
             const data = await jobApplyCollection.updateOne(query, {
                 $set: {
                     'status': status,
