@@ -244,7 +244,16 @@ async function run() {
             const resultArray = await result.toArray()
             res.json(resultArray)
         });
+//edit status demo 
+app.put('/api/scholarship/edit/:id', async (req, res) => {
+    const cursor = req.params.id
+    const {status}  = req.body
+    const filter = { _id: ObjectID(cursor) }
+    const updateDoc = { $set: { "status": status } };
+    const result = await scholarshipCollection.updateOne(filter, updateDoc);
+    res.send(result.acknowledged);
 
+})
         // data to db data of those want to talk with representative  
         app.post('/api/representative', async (req, res) => {
             const data = req.body
@@ -259,6 +268,16 @@ async function run() {
             const resultArray = await result.toArray()
             res.json(resultArray)
         })
+         //edit status representative 
+         app.put('/api/representative/edit/:id', async (req, res) => {
+            const cursor = req.params.id
+            const {status}  = req.body
+            const filter = { _id: ObjectID(cursor) }
+            const updateDoc = { $set: { "status": status } };
+            const result = await recruitCollection.updateOne(filter, updateDoc);
+            res.send(result.acknowledged);
+
+        })
         // sending demo request data to db
         app.post('/api/demo', async (req, res) => {
             const data = req.body
@@ -271,6 +290,16 @@ async function run() {
             const result = await demoCollection.find({});
             const resultArray = await result.toArray()
             res.json(resultArray)
+        })
+           //edit status demo 
+           app.put('/api/demo/edit/:id', async (req, res) => {
+            const cursor = req.params.id
+            const {status}  = req.body
+            const filter = { _id: ObjectID(cursor) }
+            const updateDoc = { $set: { "status": status } };
+            const result = await demoCollection.updateOne(filter, updateDoc);
+            res.send(result.acknowledged);
+
         })
         // employer profile
         app.post('/api/employerProfile', async (req, res) => {
@@ -356,7 +385,7 @@ async function run() {
             const encodedPdf = pdfData.toString('base64')
             const Pdfbuffer = Buffer.from(encodedPdf, 'base64')
             const data = {
-                 email,jobData,status, pdf: Pdfbuffer
+                 email,jobData, pdf: Pdfbuffer
             }
 
             const result = await jobApplyCollection.insertOne(data);
@@ -370,18 +399,12 @@ async function run() {
             res.send(data)
         })
         app.patch('/api/jobApply/edit/:id', async (req, res) => {
-            const id = req.params.id;
-            const status = req.body.status;
-            const query = {_id: ObjectID(id)}
-            const data = await jobApplyCollection.updateOne(query, {
-                $set: {
-                    'status': status,
-                }
-            },
-                
-            );
-            console.log(data)
-            res.send(data.acknowledged)
+            const cursor = req.params.id
+            const {status}  = req.body
+            const filter = { _id: ObjectID(cursor) }
+            const updateDoc = { $set: { "status": status } };
+            const result = await jobApplyCollection.updateOne(filter, updateDoc);
+            res.send(result.acknowledged);
         })
         // sending price request data to db
         app.post('/api/enterprice', async (req, res) => {
@@ -396,6 +419,16 @@ async function run() {
             const resultArray = await result.toArray()
             res.json(resultArray)
         })
+              //edit status enterpriceCollection 
+    app.put('/api/enterprice/edit/:id', async (req, res) => {
+        const cursor = req.params.id
+        const {status}  = req.body
+        const filter = { _id: ObjectID(cursor) }
+        const updateDoc = { $set: { "status": status } };
+        const result = await enterpriceCollection.updateOne(filter, updateDoc);
+        res.send(result.acknowledged);
+
+    })
         // sending organization that want to try unive recruitment
         app.post('/api/unive_recruitement', async (req, res) => {
             const data = req.body
@@ -409,6 +442,16 @@ async function run() {
             const resultArray = await result.toArray()
             res.json(resultArray)
         })
+            //edit status organization 
+            app.put('/api/unive_recruitement/edit/:id', async (req, res) => {
+                const cursor = req.params.id
+                const {status}  = req.body
+                const filter = { _id: ObjectID(cursor) }
+                const updateDoc = { $set: { "status": status } };
+                const result = await orgRecruitCollection.updateOne(filter, updateDoc);
+                res.send(result.acknowledged);
+    
+            })
         // sending instructor data to db
         app.post('/api/instructor', async (req, res) => {
             const { FullName, email, PhoneNumber, subject } = req.body
@@ -422,6 +465,16 @@ async function run() {
             }
             const result = await instructorApplyCollection.insertOne(data);
             res.send(result)
+        })
+         //edit status instructor 
+         app.put('/api/instructor/edit/:id', async (req, res) => {
+            const cursor = req.params.id
+            const {status}  = req.body
+            const filter = { _id: ObjectID(cursor) }
+            const updateDoc = { $set: { "status": status } };
+            const result = await instructorApplyCollection.updateOne(filter, updateDoc);
+            res.send(result.acknowledged);
+
         })
         // want to be unive instructor
         app.get('/api/instructor', async (req, res) => {
@@ -508,6 +561,14 @@ async function run() {
             }
             const result = await contributerApplyCollection.insertOne(data);
             res.send(result)
+        })
+        app.put('/api/contributer/edit/:id', async (req, res) => {
+            const cursor = req.params.id
+            const {status}  = req.body
+            const filter = { _id: ObjectID(cursor) }
+            const updateDoc = { $set: { "status": status } };
+            const result = await contributerApplyCollection.updateOne(filter, updateDoc);
+            res.send(result.acknowledged);
         })
         // geting contributer data 
         app.get('/api/contributer', async (req, res) => {
