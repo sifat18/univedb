@@ -21,9 +21,8 @@ async function run() {
         const courseCollection = univeDb.collection('courses')
         const orderCollection = univeDb.collection('orders')
         const deletedCourseCollection = univeDb.collection('deletedCourses')
+        const profileCollection = univeDb.collection('profiles')
 
-        // const reviewCollection = titanDB.collection('reviews')
-        // const orderCollection = titanDB.collection('orders')
         const resumeCollection = univeDb.collection('resume')
         const userCollection = univeDb.collection('users')
         const recruitCollection = univeDb.collection('recruits')
@@ -187,6 +186,7 @@ async function run() {
             const result = await courseCollection.insertOne(data);
             res.send(result.acknowledged)
         })
+        
         app.post('/api/deletedcourses', async (req, res) => {
             const data = req.body
             const result = await deletedCourseCollection.insertOne(data);
@@ -609,6 +609,20 @@ app.put('/api/scholarship/edit/:id', async (req, res) => {
             res.json(resumeData)
 
         });
+
+        // sending data to db
+        app.post('/api/profile', async (req, res) => {
+            const data = req.body
+            const result = await profileCollection.insertOne(data);
+            res.send(result.acknowledged)
+        })
+        // sending data to db
+        app.get('/api/profile/:email', async (req, res) => {
+            const cursor = req.params.email
+            const query = { email: cursor }
+            const result = await profileCollection.find(query);
+            res.json(result)
+        })
 
     } finally {
         // client.close()
