@@ -620,7 +620,7 @@ app.put('/api/scholarship/edit/:id', async (req, res) => {
         app.get('/api/profile/:email', async (req, res) => {
             const cursor = req.params.email
             const query = { email: cursor }
-            const result = await profileCollection.find(query);
+            const result = await profileCollection.findOne(query);
             res.json(result)
         })
 
