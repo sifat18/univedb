@@ -623,6 +623,15 @@ app.put('/api/scholarship/edit/:id', async (req, res) => {
             const result = await profileCollection.findOne(query);
             res.json(result)
         })
+        app.get('/api/profile/edit/:email', async (req, res) => {
+            const cursor = req.params.email
+            const data = req.body
+            const { _id, ...rest } = { ...data }
+            const query = { email: cursor }
+            const updateDoc = { ...rest }
+            const result = await profileCollection.replaceOne(query, updateDoc);
+            res.json(result)
+        })
 
     } finally {
         // client.close()
